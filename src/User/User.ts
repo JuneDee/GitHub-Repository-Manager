@@ -6,7 +6,7 @@ import { getUser } from '../octokit/commands/getUser';
 
 
 enum Status {
-  notLogged, logging, errorLogging, logged
+  notLogged, awaitingOAuth, logging, errorLogging, connectionError, logged
 }
 
 export interface UserInterface {
@@ -27,11 +27,11 @@ class User implements UserInterface {
       user.status = user.Status.logged;
       accountTreeDataProvider.refresh();
     }
-    catch (error) {
+    catch (err) {
       user.status = user.Status.errorLogging;
-      window.showErrorMessage(error.message);
+      window.showErrorMessage(err.message);
       accountTreeDataProvider.refresh();
-      throw new Error(error);
+      throw new Error(err);
     }
   }
 }

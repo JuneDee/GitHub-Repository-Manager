@@ -1,7 +1,9 @@
 import vscode, { ThemeIcon } from 'vscode';
 import { TreeItem } from "../base";
 import { initOctokit } from "../../octokit/octokit";
-import { openOAuthWebPage, copyOAuthLinkToClipboard } from '../../octokit/oauth';
+import { openOAuthWebPage, copyOAuthLinkToClipboard, closeOAuthServer, oauthPort } from '../../octokit/oauth';
+import { user } from '../../User/User';
+import { accountTreeDataProvider } from './account';
 
 export function activateNotLogged() {
   // Open OAuth web page
@@ -12,7 +14,12 @@ export function activateNotLogged() {
   // Copy OAuth link to clipboard
   vscode.commands.registerCommand('githubRepoMgr.commands.auth.copyOAuthLinkToClipboard', () => {
     copyOAuthLinkToClipboard();
-    vscode.window.showInformationMessage('Link copied to clipboard! Access it on a browser!');
+  });
+
+  // Close OAuth callback server
+  vscode.commands.registerCommand('githubRepoMgr.commands.auth.closeOauthServer', () => {
+    closeOAuthServer();
+    accountTreeDataProvider.refresh();
   });
 
   // Enter token on input box
@@ -39,7 +46,11 @@ export function getNotLoggedTreeData() {
           label: ' OAuth -> Copy link to clipboard',
           command: 'githubRepoMgr.commands.auth.copyOAuthLinkToClipboard',
           iconPath: new ThemeIcon('link')
-
+        }),
+        (user.status === user.Status.awaitingOAuth) && new TreeItem({
+          label: ` Awaiting OAuth token on port ${oauthPort}. Click to cancel`,
+          command: 'githubRepoMgr.commands.auth.closeOauthServer',
+          iconPath: new ThemeIcon('link')
         }),
         new TreeItem({
           label: ' Personal access token',
@@ -48,6 +59,5 @@ export function getNotLoggedTreeData() {
         }),
       ]
     }),
-
   ];
 }

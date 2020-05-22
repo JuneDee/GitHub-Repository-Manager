@@ -1,95 +1,108 @@
-import { oauthCallbackPort, authCallbackPath, callbackPagePath } from '../consts';
-import vscode, { window } from "vscode";
-import express from 'express';
-import { initOctokit } from './octokit';
-
-
 // Thanks to Settings-Sync extension where I learned how they made the OAuth authorization
 // (and to many other extensions where I learned lots of stuff to get this one done)
 // Settings-Sync however exposes publicly the GitHub OAuth App clientId and clientSecret in the code.
 // I decided to use Vercel, which handles the communication with GitHub api.
 
+import { callbackPagePath } from '../consts';
+import vscode, { window } from "vscode";
+import express from 'express';
+import { initOctokit } from './octokit';
+import { configs } from '../configs';
+import { user } from '../User/User';
+
+
 
 let expressApp: express.Express | null = null;
+export let oauthPort = 0;
 
-const oauthUri = `https://micro-github.srbrahma.now.sh/api/login`;
+function getOauthUri(port: number) {
+  return `https://micro-github.srbrahma.now.sh/api/login?redirectPort=${port}`;
+}
+
 
 /**
  * Also starts the server.
- * @export
  */
 export async function openOAuthWebPage() {
   try {
-    await openServer();
-    vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(oauthUri));
+    oauthPort = await openServer();
+    user.status = user.Status.awaitingOAuth;
+    await vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(getOauthUri(oauthPort)));
   }
-  catch (error) {
-    window.showErrorMessage(error);
+  catch (err) {
+    window.showErrorMessage(err.message);
   }
 }
 
 
 /**
  * Also starts the server.
- * @export
  */
 export async function copyOAuthLinkToClipboard() {
   try {
-    await openServer();
-    vscode.env.clipboard.writeText(oauthUri);
+    oauthPort = await openServer();
+    user.status = user.Status.awaitingOAuth;
+    vscode.env.clipboard.writeText(getOauthUri(oauthPort));
+    window.showInformationMessage('Link copied to clipboard! Access it on a browser!');
   }
-  catch (error) {
-    window.showErrorMessage(error);
+  catch (err) {
+    window.showErrorMessage(err.message);
   }
 }
 
 
-// TODO: Add custom port support. For now, it displays an error if port already in use.
-async function openServer(): Promise<void> {
-
-  // https://github.com/nodejs/node/issues/21482#issuecomment-626025579
-  function asyncListen(port: number) {
-    return new Promise((resolve, reject) => {
-      expressApp.listen(port)
-        .once('listening', resolve)
-        .once('error', reject);
-    });
-  }
-
+/**
+ * Returns the server port.
+ */
+async function openServer(): Promise<number> {
   if (expressApp) // Server already running
     return;
 
-  expressApp = express().use(express.json());
-
   try {
-    await asyncListen(oauthCallbackPort);
-  }
-  catch (error) {
-    throw new Error(error);
-  }
+    expressApp = express();
+    let portToBeUsed = configs.oauthPort;
 
-  // Handles the callback from the server, that contains the token or error.
-  expressApp.get(authCallbackPath, (req, res) => {
-    const { token, error } = req.query as { token?: string, error?: string; };
-    if (token) {
-      res.redirect(`http://localhost:${oauthCallbackPort}${callbackPagePath}`);
+    if (portToBeUsed < 0 || portToBeUsed > 65535 || !Number.isInteger(portToBeUsed)) // If invalid settings.
+      portToBeUsed = 0; // 0 means express will generate a random port.
+
+    const port = await asyncListen(portToBeUsed); // As we may have generated a random port.
+
+    // Handles the callback from the server. It will always receive token, as errors are displayed in Vercel web page.
+    expressApp.get('/', (req, res) => {
+      const { token } = req.query as { token: string; };
+
       initOctokit(token);
-    }
-    else
-      res.send(error); // TODO: Could be better.
+      res.redirect(`http://localhost:${port}${callbackPagePath}`);
+      closeOAuthServer();
+    });
 
-    closeServer();
-  });
+    // Just to remove the URI with the token. This is a success page.
+    expressApp.get(callbackPagePath, (req, res) => res.send(callbackHtmlPage));
+    return port;
+  }
 
-  // Just to remove the URI with the token. This is a success page.
-  expressApp.get(callbackPagePath, (req, res) => {
-    res.send(callbackHtmlPage);
-  });
-
+  catch (err) {
+    throw new Error(`Error opening the OAuth callback server. Maybe is a port problem, you should try changing it in the settings. Details: [${err.message}]`);
+  }
 }
 
-function closeServer() {
-  expressApp.removeAllListeners(); // Maybe isn't needed.
+
+
+/**
+ * Returns the port of the new server
+ * https://github.com/nodejs/node/issues/21482#issuecomment-626025579
+ */
+function asyncListen(port?: number): Promise<number> {
+  return new Promise((resolve, reject) => {
+    const listener = expressApp.listen(port) as any; // .port wasn't appearing under address().
+    listener
+      .once('listening', () => resolve(listener.address().port))
+      .once('error', reject);
+  });
+}
+
+export function closeOAuthServer() {
+  expressApp.removeAllListeners();
   expressApp = null;
 }
 

@@ -21,14 +21,30 @@ class TreeDataProvider extends BaseTreeDataProvider {
 
   protected makeData() {
     switch (user.status) {
+      case user.Status.errorLogging:
+        this.data = [
+          new TreeItem({
+            label: 'Authorization Error!',
+            children: [
+              new TreeItem({
+                label: 'Retry'
+              }),
+              new TreeItem({
+                label: 'Cancel and forget token'
+              }),
+            ]
+          }),
+        ]; break;
 
-      case user.Status.errorLogging: // TODO: Bad when token already stored and we have a connection error
       case user.Status.notLogged:
         this.data = getNotLoggedTreeData(); break;
+
       case user.Status.logging:
-        this.data = [new TreeItem({
-          label: 'Loading...'
-        })]; break;
+        this.data = [
+          new TreeItem({
+            label: 'Loading...'
+          })
+        ]; break;
       case user.Status.logged:
         this.data = getLoggedTreeData(); break;
     }

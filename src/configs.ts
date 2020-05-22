@@ -1,7 +1,13 @@
 import { workspace } from "vscode";
 import os from 'os';
 
+// ## 0.4.0 - May;
 
+// doing: cancel oauth(via tree view item or successful connection);
+
+// doing: connection error on auth.
+
+//   doing: custom port
 
 class Configs {
   getConfig = getConfig;
@@ -18,6 +24,8 @@ class Configs {
   }
 
   get saveToken() { return getConfig<boolean>('saveToken'); }
+
+  get oauthPort() { return getConfig<number>('oauthCallbackPort'); }
 
   clonedReposSearch = clonedReposSearch;
 }
