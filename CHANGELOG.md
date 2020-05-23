@@ -1,5 +1,26 @@
 # Change Log : GitHub Repository Manager
 
+## 0.4.0 - May 23, 2020
+
+Changed OAuth to allow custom ports.
+
+
+## 0.3.6 - May 22, 2020 -> Today was the day of quick and small changes.
+
+Reworked the Repositories Tree View Item Tooltip. Looks better now. Unfortunatelly, the ":" aren't perfectly alignable, as the font is not monospaced. Yeah, it annoys me too. We have to accept it!!
+
+<img src="https://raw.githubusercontent.com/SrBrahma/GitHub-Repository-Manager/master/images/CHANGELOG_md/0_3_6.png" alt="0.3.6">
+
+
+## 0.3.5 - May 22, 2020
+
+Clone command seems to be fully fixed. Now, on repository commit, it will have "master" as the default destination.
+
+
+## 0.3.4 - May 22, 2020
+
+Quick fix on Activity Bar name. It was still being called GitHub Repository Loader (early name) instead of Manager.
+
 
 ## 0.3.3 - May 22, 2020
 
@@ -8,6 +29,7 @@ Fixed private repositories not showing as private.
 Added "Created" and "Updated" dates on repository tooltip.
 
 Fixed "Git fatal no configured push destination" on a cloned repository push
+
 
 ## 0.3.2 - May 16, 2020
 

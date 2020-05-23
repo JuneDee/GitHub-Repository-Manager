@@ -16,7 +16,8 @@ let expressApp: express.Express | null = null;
 export let oauthPort = 0;
 
 function getOauthUri(port: number) {
-  return `https://micro-github.srbrahma.now.sh/api/login?redirectPort=${port}`;
+  // return `https://micro-github.srbrahma.now.sh/api/login?redirectPort=${port}`;
+  return `https://micro-github-5p0tv7hvx.now.sh/api/login?redirectPort=${port}`; // Dev
 }
 
 
@@ -70,10 +71,14 @@ async function openServer(): Promise<number> {
     // Handles the callback from the server. It will always receive token, as errors are displayed in Vercel web page.
     expressApp.get('/', (req, res) => {
       const { token } = req.query as { token: string; };
-
       initOctokit(token);
       res.redirect(`http://localhost:${port}${callbackPagePath}`);
       closeOAuthServer();
+    });
+
+    // This may be removed after 15 jun. Just a "migration".
+    expressApp.get('/oauthcallback', (req, res) => {
+      res.redirect('/');
     });
 
     // Just to remove the URI with the token. This is a success page.
