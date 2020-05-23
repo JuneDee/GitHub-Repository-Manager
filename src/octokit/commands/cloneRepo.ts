@@ -47,10 +47,20 @@ export async function cloneRepo(repo: Repository, parentPath: string) {
   try {
     await exec(`git init ${repo.name}`,
       { cwd: parentPath });
-    await exec(`git remote add GitHub https://github.com/${repo.ownerLogin}/${repo.name}.git`,
+    await exec(`git remote add origin https://github.com/${repo.ownerLogin}/${repo.name}.git`,
       { cwd: repoPath });
     await exec(`git pull https://${token}@github.com/${repo.ownerLogin}/${repo.name}.git master`,
       { cwd: repoPath });
+
+    // I didn't find a way to automatically set the push destination.
+    // The usual way is by doing "git push -u origin master", however, it requires the user being
+    // logged, which isn't always true (and we actually didn't in previous steps)
+
+    fs.appendFileSync(path.resolve(parentPath, repo.name, '.git', 'config'),
+      `[branch "master"]
+\tremote = origin
+\tmerge = refs/heads/master`);
+
   }
   catch (err) {
     // This will happen if the repository never had a push. As we know it really exists, isn't a problem at all.
