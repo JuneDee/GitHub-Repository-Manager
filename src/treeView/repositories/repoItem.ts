@@ -1,7 +1,7 @@
 import { Repository } from "../../Repository/Repository";
 import vscode from 'vscode';
 import { TreeItem, TreeItemConstructor } from "../base";
-import { stringInsert } from "../../aux";
+import { stringInsert } from "../../main/aux";
 
 // https://code.visualstudio.com/api/references/icons-in-labels
 

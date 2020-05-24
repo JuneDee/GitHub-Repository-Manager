@@ -2,7 +2,7 @@ import { workspace, window, Uri, commands } from 'vscode';
 import { Repository, repositories } from "../Repository/Repository";
 import { cloneRepo } from "../octokit/commands/cloneRepo";
 import path from 'path';
-import { configs } from '../configs';
+import { configs } from '../main/configs';
 
 // Made to look similar to vscode clone command. Also, took some small pieces from it.
 // uses the git.defaultCloneDirectory setting, as, you know, the default clone directory.

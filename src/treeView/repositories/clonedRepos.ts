@@ -41,7 +41,7 @@ function getChildren(clonedRepos: Repository[]): TreeItem | TreeItem[] {
 
     case repositories.SearchLocalReposStatus.noStartingSearchDirs:
       return new TreeItem({
-        label: 'No directories to search found, please review your settings',
+        label: 'No directories to search, please read extension README and review your settings',
         iconPath: new ThemeIcon('x')
       });
 

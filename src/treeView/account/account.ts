@@ -1,5 +1,5 @@
 import vscode from 'vscode';
-import { TreeItem, BaseTreeDataProvider } from '../base';
+import { BaseTreeDataProvider } from '../base';
 import { user } from '../../User/User';
 import { getLoggedTreeData, activateLogged } from './accountLogged';
 import { getNotLoggedTreeData, activateNotLogged } from './accountNotLogged';
@@ -20,34 +20,9 @@ class TreeDataProvider extends BaseTreeDataProvider {
   constructor() { super(); }
 
   protected makeData() {
-    switch (user.status) {
-      case user.Status.errorLogging:
-        this.data = [
-          new TreeItem({
-            label: 'Authorization Error!',
-            children: [
-              new TreeItem({
-                label: 'Retry'
-              }),
-              new TreeItem({
-                label: 'Cancel and forget token'
-              }),
-            ]
-          }),
-        ]; break;
-
-      case user.Status.notLogged:
-        this.data = getNotLoggedTreeData(); break;
-
-      case user.Status.logging:
-        this.data = [
-          new TreeItem({
-            label: 'Loading...'
-          })
-        ]; break;
-      case user.Status.logged:
-        this.data = getLoggedTreeData(); break;
-    }
+    if (user.status === user.Status.logged)
+      return getLoggedTreeData();
+    else
+      return getNotLoggedTreeData();
   }
-
 }

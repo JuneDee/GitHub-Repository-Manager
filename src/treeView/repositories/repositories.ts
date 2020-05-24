@@ -36,8 +36,7 @@ export function activateTreeViewRepositories() {
 }
 
 
-// There is a TreeItem from vscode. Should I use it? But it would need a workaround to
-// avoid using title in command.
+
 class TreeDataProvider extends BaseTreeDataProvider {
 
   constructor() {
@@ -52,7 +51,7 @@ class TreeDataProvider extends BaseTreeDataProvider {
       (repo.localPath ? clonedRepos : notClonedRepos).push(repo);
     });
 
-    this.data = [getClonedTreeItem(clonedRepos), getNotClonedTreeItem(notClonedRepos)];
+    return [getClonedTreeItem(clonedRepos), getNotClonedTreeItem(notClonedRepos)];
   }
 }
 

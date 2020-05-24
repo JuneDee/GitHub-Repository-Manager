@@ -1,4 +1,4 @@
-import { configs } from "../configs";
+import { configs } from "../main/configs";
 import { readdir } from 'mz/fs';
 import path from 'path';
 import { exec } from 'mz/child_process';

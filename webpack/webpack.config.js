@@ -11,7 +11,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const config = {
   target: 'node',
 
-  entry: path.resolve(__dirname, '..', 'src', 'extension.ts'),
+  entry: path.resolve(__dirname, '..', 'src', 'main', 'extension.ts'),
   output: {
     path: path.resolve(__dirname, '..', 'dist'),
     filename: 'extension.js',

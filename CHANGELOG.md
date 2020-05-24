@@ -2,7 +2,11 @@
 
 ## 0.4.0 - May 23, 2020
 
-Changed OAuth to allow custom ports.
+Changed OAuth to allow custom ports (Also changed micro-github code hosted on Vercel).
+
+// doing: cancel oauth(via tree view item or successful connection);
+
+// doing: connection error on auth.
 
 
 ## 0.3.6 - May 22, 2020 -> Today was the day of quick and small changes.

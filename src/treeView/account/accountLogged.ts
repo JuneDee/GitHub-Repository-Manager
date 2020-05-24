@@ -14,25 +14,23 @@ export function activateLogged() {
 }
 
 export function getLoggedTreeData() {
-  return [
-    new TreeItem({
-      label: `Hi, ${user.login}!`,
-      iconPath: new ThemeIcon('verified'),
-      children: [
-        // That space before the label improves readability (that the icon reduces, but they look cool!)
-        new TreeItem({
-          label: ' Open your GitHub page',
-          command: 'githubRepoMgr.commands.user.openProfilePage',
-          iconPath: new ThemeIcon('github')
+  return new TreeItem({
+    label: `Hi, ${user.login}!`,
+    iconPath: new ThemeIcon('verified'),
+    children: [
+      // That space before the label improves readability (that the icon reduces, but they look cool!)
+      new TreeItem({
+        label: ' Open your GitHub page',
+        command: 'githubRepoMgr.commands.user.openProfilePage',
+        iconPath: new ThemeIcon('github')
 
-        }),
-        new TreeItem({
-          label: ' Logout and forget token',
-          command: 'githubRepoMgr.commands.auth.logout',
-          tooltip: 'Logouts and forgets the token, if stored.',
-          iconPath: new ThemeIcon('log-out')
-        }),
-      ]
-    })
-  ];
+      }),
+      new TreeItem({
+        label: ' Logout and forget token',
+        command: 'githubRepoMgr.commands.auth.logout',
+        tooltip: 'Logouts and forgets the token, if stored.',
+        iconPath: new ThemeIcon('log-out')
+      }),
+    ]
+  });
 }

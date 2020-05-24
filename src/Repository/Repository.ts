@@ -44,19 +44,22 @@ export class Repositories {
   /**
   * You probably don't want to await this function, as it will run findLocalRepos...()
   */
-  async loadRepos() {
+  async loadRepos({ showError } = { showError: true }) {
     try {
       this.repositories = await getRepos();
       this.findLocalRepos();
     }
     catch (err) {
-      window.showErrorMessage(err.message);
+      if (showError)
+        window.showErrorMessage(err.message);
       throw new Error(err);
     }
   }
 
-  clearRepositories() {
+  clearRepositories(updateTreeView: boolean = true) {
     this.repositories = [];
+    if (updateTreeView)
+      repositoriesTreeDataProvider.refresh();
   }
 
   async findLocalRepos() {

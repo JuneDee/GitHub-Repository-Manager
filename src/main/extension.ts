@@ -4,9 +4,9 @@ dotenv.config({ path: envPath }); // Path was wrong, without manually setting it
 
 import * as vscode from 'vscode';
 import { storage } from './storage';
-import { activateTreeViewAccount } from './treeView/account/account';
-import { activateTreeViewRepositories } from './treeView/repositories/repositories';
-import { activateOctokit } from './octokit/octokit';
+import { activateTreeViewAccount } from '../treeView/account/account';
+import { activateTreeViewRepositories } from '../treeView/repositories/repositories';
+import { activateOctokit } from '../octokit/octokit';
 
 
 // this method is called when your extension is activated

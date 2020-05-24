@@ -50,15 +50,27 @@ export abstract class BaseTreeDataProvider implements vscode.TreeDataProvider<Tr
   protected data: TreeItem[] = [];
 
   constructor() {
-    this.makeData();
+    this.getData();
   }
 
   refresh() {
-    this.makeData();
+    this.getData();
     this._onDidChangeTreeData.fire();
   }
 
-  protected abstract makeData(): void;
+  // Just to get and set this.data from makeData().
+  private getData() {
+    let data = this.makeData();
+    if (data) {
+      if (!Array.isArray(data))
+        data = [data];
+      this.data = data;
+    }
+  }
+
+  // If TreeItem is returned, will use it as this.data. It may change this.data directly without
+  // returning anything (will probably remove this later)
+  protected abstract makeData(): TreeItem | TreeItem[] | void;
 
 
   getTreeItem(element: TreeItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
