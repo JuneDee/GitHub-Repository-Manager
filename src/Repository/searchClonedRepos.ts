@@ -28,7 +28,6 @@ async function getGitUrls(dirsPath: string[]): Promise<DirWithGitUrl[]> {
       // This will get every non whitespace char to the left and right of github uri.
       const regex = result.match(/\S+github.com\S+/);
 
-      // console.log([dirPath, result, regex]);
       if (regex) {
         // Remove the .git the gitUrl may or not have (as our repo.htmlUrl don't have .git)
         // This $ make it only remove the final .git, not removing .git from ie .github.io.git

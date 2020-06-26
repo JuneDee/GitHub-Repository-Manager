@@ -1,12 +1,15 @@
 # Change Log : GitHub Repository Manager
 
-## 0.4.0 - May 23, 2020
+## 0.4.0 - May 24, 2020
 
-Changed OAuth to allow custom ports (Also changed micro-github code hosted on Vercel).
+Added Retry button on authentication fail. Useful if your internet failed during authentication; no need to auth again.
 
-// doing: cancel oauth(via tree view item or successful connection);
+Changed OAuth to allow custom ports (also changed micro-github code hosted on Vercel).
 
-// doing: connection error on auth.
+Added an item in the Account tree view that shows the current port being used in the OAuth callback server. Clicking on it closes the server and makes the port available again.
+
+Fixed some minor bugs.
+
 
 
 ## 0.3.6 - May 22, 2020 -> Today was the day of quick and small changes.

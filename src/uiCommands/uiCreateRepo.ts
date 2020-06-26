@@ -2,6 +2,7 @@ import { create } from "../octokit/commands/createRepo";
 import { window } from "vscode";
 import { repositories } from "../Repository/Repository";
 import { uiCloneTo } from "./uiCloneTo";
+import { uiUseAsRemote } from "./uiUseAsRemote";
 
 // Those are here so if we have an error, so the user doesn't have to fill again.
 let name = '';
@@ -51,11 +52,15 @@ export async function uiCreateRepo() {
     description = '';
 
     repositories.loadRepos();
-    const answer = await window.showInformationMessage(`Repository ${name} created successfully! Do you want to clone it?`, 'Yes', 'No');
 
-    if (answer === 'Yes') {
+    const setAsRemote = 'Set as Remote of a Workspace Folder';
+    const answer = await window.showInformationMessage(`Repository ${name} created successfully! Do you want to clone it?`, 'Yes', 'No', setAsRemote);
+
+    if (answer === 'Yes')
       uiCloneTo(newRepo); // uiCloneTo will call repositories.loadRepos() again on success.
-    }
+
+    else if (answer === setAsRemote)
+      uiUseAsRemote(newRepo);
   }
 
   catch (err) {

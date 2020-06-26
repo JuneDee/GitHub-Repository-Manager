@@ -2,19 +2,18 @@ import { searchLocalReposAndSetRepoPath, SearchClonedReposStatus } from "./searc
 import { repositoriesTreeDataProvider } from "../treeView/repositories/repositories";
 import { window } from "vscode";
 import { getRepos } from '../octokit/commands/getRepos';
+import { user } from '../User/User';
 
 interface RepositoryInterface {
   name: string,
   description: string | null,
   ownerLogin: string,
   languageName?: string,  // "C++" etc
-  url: string,
+  url: string, // Doesn't include the .git in the end
 
   isPrivate: boolean,
   isTemplate: boolean,
   isFork: boolean,
-
-  userIsAdmin: boolean,
 
   parentRepoName?: string,
   parentRepoOwnerLogin?: string,
@@ -30,6 +29,8 @@ export class Repository {
   constructor(props: RepositoryInterface) {
     Object.assign(this, props);
   }
+  get urlDotGit() { return this.url + '.git'; }
+  get userIsOwner() { return user.login === this.ownerLogin; }
 }
 
 

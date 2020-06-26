@@ -60,6 +60,7 @@ export async function initOctokit(tokenArg: string): Promise<void> {
 
   if (configs.saveToken) // 'If setting', store the token.
     storage.storeToken(tokenArg);
+
 }
 
 export function logoutAndForgetToken(): void {

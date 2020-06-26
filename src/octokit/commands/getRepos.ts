@@ -13,7 +13,6 @@ export function extractRepositoryFromData(node: any) {
     isPrivate: node.isPrivate,
     isFork: node.isFork,
     isTemplate: node.isTemplate,
-    userIsAdmin: node.viewerCanAdminister,
 
     // parent may be null if isn't a fork.
     parentRepoName: node.parent?.name,
@@ -23,6 +22,21 @@ export function extractRepositoryFromData(node: any) {
     updatedAt: new Date(node.updatedAt)
   });
 }
+
+
+
+// Will put not-user-owned repos on the end of the tree list.
+// Not needed to order alphabetically, as they are already ordered this way on the query.
+function orderRepos(repos: Repository[]) {
+  return repos.sort((a, b) => {
+    if (a.userIsOwner && !b.userIsOwner)
+      return -1;
+    if (!a.userIsOwner && b.userIsOwner)
+      return 1;
+    return 0;
+  });
+}
+
 
 
 export async function getRepos(): Promise<Repository[]> {
@@ -38,14 +52,14 @@ export async function getRepos(): Promise<Repository[]> {
       // https://github.com/octokit/graphql.js/#variables
       const { nodes, pageInfo } = (await octokit.graphql(query, {
         after: endCursor
-      })).viewer.repositories;
+      }) as any).viewer.repositories;
 
       ({ endCursor, hasNextPage } = pageInfo);
 
       repos.push(...nodes.map((node: any) => extractRepositoryFromData(node)));
     } while (hasNextPage);
 
-    return repos;
+    return orderRepos(repos);
   }
 
   catch (err) { // Octokit has a patter for errors, which we display properly at octokitErrorDisplay().
@@ -58,7 +72,12 @@ export async function getRepos(): Promise<Repository[]> {
 const query = `
 query getRepos ($after: String) {
   viewer {
-    repositories(first: 100, orderBy: {field: NAME, direction: ASC}, after: $after) {
+    repositories(
+      first: 100,
+      affiliations: [OWNER, ORGANIZATION_MEMBER, COLLABORATOR], ownerAffiliations:[OWNER, ORGANIZATION_MEMBER, COLLABORATOR],
+      orderBy: {field: NAME, direction: ASC}, after: $after
+    ) {
+
       pageInfo {
         endCursor
         hasNextPage
@@ -77,13 +96,14 @@ query getRepos ($after: String) {
         isPrivate
         isFork
         isTemplate
-        viewerCanAdminister
+
         parent {
           name
           owner {
             login
           }
         }
+
         createdAt
         updatedAt
       }

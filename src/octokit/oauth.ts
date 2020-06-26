@@ -25,14 +25,13 @@ export function activateOAuth() {
 
   // Get the callback from the server. It always receives a token, as errors are displayed in Vercel web page.
   expressApp.get('/', (req, res) => {
-    console.log((req.query as any));
     initOctokit((req.query as any).token); // Will also set user.Status as logged.
     res.redirect(`http://localhost:${oauthPort}${callbackPagePath}`);
     closeOAuthServer();
   });
 
   // This may be removed after 15 jun. Just a "migration".
-  expressApp.get('/oauthCallback', (req, res) => res.redirect('/'));
+  expressApp.get('/oauthCallback', (req, res) => res.redirect(`/?token=${req.query.token}`));
 
   // Just to remove the URI with the token. This is a success page.
   expressApp.get(callbackPagePath, (req, res) => res.send(callbackHtmlPage));

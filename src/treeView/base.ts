@@ -44,8 +44,8 @@ export abstract class BaseTreeDataProvider implements vscode.TreeDataProvider<Tr
 
   // idk yet what really are these two.
   // https://code.visualstudio.com/api/extension-guides/tree-view#updating-tree-view-content
-  private _onDidChangeTreeData: vscode.EventEmitter<TreeItem> = new vscode.EventEmitter<TreeItem>();
-  readonly onDidChangeTreeData: vscode.Event<TreeItem> = this._onDidChangeTreeData.event;
+  private _onDidChangeTreeData = new vscode.EventEmitter<TreeItem>();
+  readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
   protected data: TreeItem[] = [];
 
@@ -55,7 +55,7 @@ export abstract class BaseTreeDataProvider implements vscode.TreeDataProvider<Tr
 
   refresh() {
     this.getData();
-    this._onDidChangeTreeData.fire();
+    this._onDidChangeTreeData.fire(null);
   }
 
   // Just to get and set this.data from makeData().

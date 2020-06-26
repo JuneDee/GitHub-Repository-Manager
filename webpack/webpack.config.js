@@ -36,11 +36,13 @@ const config = {
         use: [
           {
             loader: 'ts-loader',
-            options: { // Makes the compilation faster https://github.com/TypeStrong/ts-loader#faster-builds
-              transpileOnly: true
-            }
+
           }
         ]
+      },
+      {
+        test: /\.node$/,
+        use: 'node-loader'
       }
     ]
   },

@@ -1,7 +1,6 @@
 import { Repository } from "../../Repository/Repository";
 import vscode from 'vscode';
 import { TreeItem, TreeItemConstructor } from "../base";
-import { stringInsert } from "../../main/aux";
 
 // https://code.visualstudio.com/api/references/icons-in-labels
 
@@ -54,7 +53,9 @@ export class RepoItem extends TreeItem {
 
   constructor({ repo, command, ...rest }: RepoItemConstructor) {
     super({
-      label: repo.name,
+      label: (repo.userIsOwner
+        ? repo.name
+        : (`${repo.ownerLogin} / ${repo.name}`)),
       tooltip: getTooltip(repo),
       command,
       iconPath: getIcon(repo),
@@ -63,35 +64,3 @@ export class RepoItem extends TreeItem {
     this.repo = repo;
   }
 }
-
-
-// Not used. For > 2 lines, it breaks at different locations, as the font is not monospaced.
-// // Avoid too large tooltips by breaking lines
-// function formatText(string: string) {
-//   // return string;
-//   const maxCharsPerLine = 70;
-
-//   const preNewLine = '\r\n';
-//   const preNewLineDash = '-\r\n';
-
-//   const posNewLine = '  ';
-
-//   let i = maxCharsPerLine - 1;
-//   while (i < string.length) {
-//     if (string[i] !== ' ') {
-//       string = stringInsert(string, i, preNewLineDash);
-//       i += preNewLineDash.length;
-//     }
-//     else {
-//       string = stringInsert(string, i, preNewLine);
-//       i += preNewLine.length;
-//     }
-
-//     string = stringInsert(string, i, posNewLine);
-//     i += posNewLine.length;
-
-//     i += maxCharsPerLine;
-//   }
-
-//   return string;
-// }
