@@ -3,24 +3,24 @@ import { Repository } from "../Repository/Repository";
 import { cloneRepo } from "../octokit/commands/cloneRepo";
 
 
-export async function uiUseAsRemote(repo: Repository) {
+// export async function uiUseAsRemote(repo: Repository) {
 
-  if (!vscode.workspace.workspaceFolders) {
-    window.showWarningMessage("Can't select a workspace folder, as there are no opened folders in the workspace.");
-    return;
-  }
+//   if (!vscode.workspace.workspaceFolders) {
+//     window.showWarningMessage("Can't select a workspace folder, as there are no opened folders in the workspace.");
+//     return;
+//   }
 
 
 
-  const folder = await window.showWorkspaceFolderPick();
+//   const folder = await window.showWorkspaceFolderPick();
 
-  try {
-    cloneRepo(repo, folder.uri.fsPath, false);
-  }
+//   try {
+//     cloneRepo(repo, folder.uri.fsPath);
+//   }
 
-  catch (err) {
-    window.showErrorMessage(err.message);
-  }
-}
+//   catch (err) {
+//     window.showErrorMessage(err.message);
+//   }
+// }
 
 

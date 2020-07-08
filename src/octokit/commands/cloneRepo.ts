@@ -30,7 +30,6 @@ import { exec } from 'mz/child_process';
 import path from 'path';
 import fs from 'fs';
 import { token } from "../octokit";
-import rimraf from 'rimraf';
 /**
  *
  *
@@ -67,8 +66,7 @@ export async function cloneRepo(repo: Repository, parentPath: string) {
     if ((err.message as string).includes("couldn't find remote ref master"))
       return;
 
-    // Removes the repo dir if error. For some reason rimraf needs this empty callback.
-    rimraf(repoPath, () => { });
+    fs.rmdirSync(repoPath, { recursive: true });
 
     // Removes the token from the error message
     const censoredMsg = (err.message as string).replace(token, '[tokenHidden]');

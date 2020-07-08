@@ -4,15 +4,15 @@ import { RepoItem } from "./repoItem";
 import { user } from "../../User/User";
 import { commands } from "vscode";
 import { uiCloneTo } from "../../uiCommands/uiCloneTo";
-import { uiUseAsRemote } from "../../uiCommands/uiUseAsRemote";
+// import { uiUseAsRemote } from "../../uiCommands/uiUseAsRemote";
 
 export function activateNotClonedRepos() {
   // Clone repo to [open select repo location]. You must pass the repo as arg.
   commands.registerCommand('githubRepoMgr.commands.notClonedRepos.cloneTo',
     ({ repo }: RepoItem) => uiCloneTo(repo));
 
-  commands.registerCommand('githubRepoMgr.commands.notClonedRepos.useAsRemote',
-    ({ repo }: RepoItem) => uiUseAsRemote(repo));
+  // commands.registerCommand('githubRepoMgr.commands.notClonedRepos.useAsRemote',
+  //   ({ repo }: RepoItem) => uiUseAsRemote(repo));
 }
 
 export function getNotClonedTreeItem(notClonedRepos: Repository[]): TreeItem | undefined {

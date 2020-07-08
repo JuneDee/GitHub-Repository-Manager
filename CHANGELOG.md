@@ -1,14 +1,20 @@
 # Change Log : GitHub Repository Manager
 
-## 0.4.0 - May 24, 2020
+## 1.0.0 - May 24, 2020 - 1k downloads version ;)
+
+Now shows your organizations repositories
+
+New repository context menu option: Add as Remote
+
+New repositories will display an option to use it as remote
 
 Added Retry button on authentication fail. Useful if your internet failed during authentication; no need to auth again.
 
-Changed OAuth to allow custom ports (also changed micro-github code hosted on Vercel).
+Changed OAuth to allow custom ports (also changed micro-github code hosted on Vercel). On previous update, I accidentaly deployed the setting for it, but wasn't already functional.
 
-Added an item in the Account tree view that shows the current port being used in the OAuth callback server. Clicking on it closes the server and makes the port available again.
+Added an item in the Account tree view that shows the current port being used in the OAuth callback server (while awaiting the OAuth'entication). Clicking on it closes the server and makes the port available again.
 
-Fixed some minor bugs.
+Minor general changes and fixes
 
 
 

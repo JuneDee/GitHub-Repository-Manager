@@ -2,7 +2,6 @@ import { create } from "../octokit/commands/createRepo";
 import { window } from "vscode";
 import { repositories } from "../Repository/Repository";
 import { uiCloneTo } from "./uiCloneTo";
-import { uiUseAsRemote } from "./uiUseAsRemote";
 
 // Those are here so if we have an error, so the user doesn't have to fill again.
 let name = '';
